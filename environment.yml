@@ -1,4 +1,4 @@
-name: stactools-package
+name: stactools-lila-hkh-glacier
 channels:
   - conda-forge
   - defaults
