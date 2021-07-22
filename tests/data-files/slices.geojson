@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"name": "slices",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::32643" } },
+"features": [
+{ "type": "Feature", "properties": { "img_source": "\/datadrive\/glaciers\/unique_tiles\/LE07_149036_20071102.tif", "mask_source": "\/datadrive\/glaciers\/processed\/masks\/mask_06.npy", "img_slice": "\/datadrive\/glaciers\/processed\/slices\/slice_6_img_072.npy", "mask_slice": "\/datadrive\/glaciers\/processed\/slices\/slice_6_mask_072.npy", "mask_mean_0": 0.002658843994140625, "mask_mean_1": 0.002658843994140625, "mask_mean_2": 0.0, "img_mean": 396.22344970703125 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 558790.14525993890129, 3784433.525695029646158 ], [ 558790.14525993890129, 3799615.657118787057698 ], [ 543608.211009174352512, 3799615.657118787057698 ], [ 543608.211009174352512, 3784433.525695029646158 ], [ 558790.14525993890129, 3784433.525695029646158 ] ] ] } },
+{ "type": "Feature", "properties": { "img_source": "\/datadrive\/glaciers\/unique_tiles\/LE07_148036_20050902.tif", "mask_source": "\/datadrive\/glaciers\/processed\/masks\/mask_14.npy", "img_slice": "\/datadrive\/glaciers\/processed\/slices\/slice_14_img_062.npy", "mask_slice": "\/datadrive\/glaciers\/processed\/slices\/slice_14_mask_062.npy", "mask_mean_0": 0.000125885009765625, "mask_mean_1": 0.000125885009765625, "mask_mean_2": 0.0, "img_mean": 444.30599975585938 }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 551600.861003861064091, 3786503.631130063906312 ], [ 551600.861003861064091, 3801685.78891257988289 ], [ 536418.907335907337256, 3801685.78891257988289 ], [ 536418.907335907337256, 3786503.631130063906312 ], [ 551600.861003861064091, 3786503.631130063906312 ] ] ] } }
+]
+}
