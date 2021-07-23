@@ -2,6 +2,7 @@
 
 from pystac import Provider
 from pystac import Link
+from pystac.extensions.eo import Band
 
 FUSED_LICENSE = "PDDL-1.0"
 FUSED_LICENSE_LINK = Link(
@@ -10,6 +11,63 @@ FUSED_LICENSE_LINK = Link(
     title="Open Data Commons Public Domain Dedication & License 1.0",
 )
 
+LILA_HKH_GLACIER_FUSED_BANDS = [
+    Band({
+        "name": "LE7 B1",
+        "common_name": "blue",
+        "center_wavelength": 0.485
+    }),
+    Band({
+        "name": "LE7 B2",
+        "common_name": "green",
+        "center_wavelength": 0.56
+    }),
+    Band({
+        "name": "LE7 B3",
+        "common_name": "red",
+        "center_wavelength": 0.66
+    }),
+    Band({
+        "name": "LE7 B4",
+        "common_name": "nir",
+        "center_wavelength": 0.835
+    }),
+    Band({
+        "name": "LE7 B5",
+        "common_name": "swir16",
+        "center_wavelength": 1.65
+    }),
+    Band({
+        "name": "LE7 B6_VCID_1",
+        "common_name": "lwir",
+        "center_wavelength": 11.45
+    }),
+    Band({
+        "name": "LE7 B6_VCID_2",
+        "common_name": "lwir",
+        "center_wavelength": 11.45
+    }),
+    Band({
+        "name": "LE7 B7",
+        "common_name": "swir22",
+        "center_wavelength": 2.215
+    }),
+    Band({
+        "name": "LE7 B8",
+        "common_name": "pan",
+        "center_wavelength": 0.71
+    }),
+    Band({
+        "name": "LE7 BQA",
+    }),
+    Band({
+        "name": "NDVI",
+    }),
+    Band({"name": "NDSI"}),
+    Band({"name": "NDWI"}),
+    Band({"name": "SRTM 90 elevation"}),
+    Band({"name": "SRTM 90 slope"}),
+]
 LILA_HKH_GLACIER_FUSED_ID = "lila-hkh-glacier-fused"
 LILA_HKH_GLACIER_FUSED_DESCRIPTION = "Each fused image is a spatial area measuring roughly 6km x 7.5km (with definitions that roughly match up with USGS quarter quadrangles). Each fused image comes with one corresponding GeoTIFF file. The entire glacier mapping dataset contains 35 tiles from Afghanistan, Bangladesh, Bhutan, China, India, Myanmar, Nepal, and Pakistan. Each GeoTIFF tile consists of 15 channels. All channels are aligned at 30m spatial resolution. Elevation and slope channels were upsampled from 90m to 30m resolution."
 LILA_HKH_GLACIER_FUSED_TITLE = "Hindu Kush Himalayas Glacier Mapping fused SRTM/Landsat 7 images"

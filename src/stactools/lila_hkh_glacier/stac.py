@@ -8,15 +8,16 @@ import rasterio.warp
 
 from datetime import datetime
 from pyproj import Transformer
+from pystac.extensions.eo import EOExtension
 from pystac.extensions.projection import ProjectionExtension
 from pystac.extensions.label import LabelExtension
 from stactools.lila_hkh_glacier.constants import (
     FUSED_LICENSE, FUSED_LICENSE_LINK, LABEL_DESCRIPTION, SLICE_LICENSE,
-    SLICE_LICENSE_LINK, LILA_HKH_GLACIER_FUSED_ID,
-    LILA_HKH_GLACIER_FUSED_DESCRIPTION, LILA_HKH_GLACIER_FUSED_TITLE,
-    LILA_HKH_GLACIER_SLICE_ID, LILA_HKH_GLACIER_SLICE_DESCRIPTION,
-    LILA_HKH_GLACIER_PROVIDER, LILA_HKH_GLACIER_SLICE_TITLE, START_DATETIME,
-    END_DATETIME)
+    SLICE_LICENSE_LINK, LILA_HKH_GLACIER_FUSED_BANDS,
+    LILA_HKH_GLACIER_FUSED_ID, LILA_HKH_GLACIER_FUSED_DESCRIPTION,
+    LILA_HKH_GLACIER_FUSED_TITLE, LILA_HKH_GLACIER_SLICE_ID,
+    LILA_HKH_GLACIER_SLICE_DESCRIPTION, LILA_HKH_GLACIER_PROVIDER,
+    LILA_HKH_GLACIER_SLICE_TITLE, START_DATETIME, END_DATETIME)
 from shapely.geometry import MultiPolygon, Polygon, box, mapping
 from shapely.ops import transform
 
@@ -84,15 +85,19 @@ def create_slice_item(feature: dict, destination: str,
         ),
     )
 
-    # Create image asset
+    asset = pystac.Asset(
+        href=feature["properties"]["img_slice"],
+        title=os.path.basename(
+            os.path.splitext(feature["properties"]["img_slice"])[0]),
+    )
+
     item.add_asset(
         "raster",
-        pystac.Asset(
-            href=feature["properties"]["img_slice"],
-            title=os.path.basename(
-                os.path.splitext(feature["properties"]["img_slice"])[0]),
-        ),
+        asset,
     )
+
+    eo = EOExtension.ext(asset, add_if_missing=True)
+    eo.bands = LILA_HKH_GLACIER_FUSED_BANDS
 
     stac_item_url = os.path.join(destination, f"{id}.json")
     item.set_self_href(stac_item_url)
@@ -160,15 +165,20 @@ def create_fused_item(cog: str, destination: str) -> pystac.Item:
     item_projection = ProjectionExtension.ext(item, add_if_missing=True)
     item_projection.epsg = epsg_code
 
+    asset = pystac.Asset(
+        href=cog,
+        media_type=pystac.MediaType.COG,
+        roles=["data"],
+        title="SRTM/Landsat 7 fused image (COG)",
+    )
+
     item.add_asset(
         "cog",
-        pystac.Asset(
-            href=cog,
-            media_type=pystac.MediaType.COG,
-            roles=["data"],
-            title="SRTM/Landsat 7 fused image (COG)",
-        ),
+        asset,
     )
+
+    eo = EOExtension.ext(asset, add_if_missing=True)
+    eo.bands = LILA_HKH_GLACIER_FUSED_BANDS
 
     stac_item_url = os.path.join(destination, f"{id}.json")
     item.set_self_href(stac_item_url)
