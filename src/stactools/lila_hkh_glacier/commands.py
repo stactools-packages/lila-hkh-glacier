@@ -83,4 +83,27 @@ def create_lilahkhglacier_command(cli):
         for feature in metadata['features']:
             stac.create_slice_item(feature, destination, transformer)
 
+    @lilahkhglacier.command(
+        "create-fused-item",
+        short_help="Create a STAC item for an SRTM/Landsat 7 fused image (COG)",
+    )
+    @click.option("-c", "--cog", required=True, help="COG href")
+    @click.option(
+        "-d",
+        "--destination",
+        required=True,
+        help="The output directory for the STAC json",
+    )
+    def create_fused_item_command(
+        cog: str,
+        destination: str,
+    ):
+        """Generate a STAC item for an SRTM/Landsat 7 fused image.
+
+        Args:
+            cog (str): location of a COG asset for the item
+            destination (str): Local directory to save the STAC Item json
+        """
+        stac.create_fused_item(cog, destination)
+
     return lilahkhglacier

@@ -2,6 +2,9 @@ import logging
 import os
 import pystac
 import pytz
+import rasterio
+import rasterio.features
+import rasterio.warp
 
 from datetime import datetime
 from pyproj import Transformer
@@ -86,6 +89,70 @@ def create_slice_item(feature: dict, destination: str,
             href=feature["properties"]["img_slice"],
             title=os.path.basename(
                 os.path.splitext(feature["properties"]["img_slice"])[0]),
+        ),
+    )
+
+    stac_item_url = os.path.join(destination, f"{id}.json")
+    item.set_self_href(stac_item_url)
+
+    item.save_object()
+
+    return item
+
+
+def create_fused_item(cog: str, destination: str) -> pystac.Item:
+    # def create_fused_item(cog: str, destination: str) -> str:
+    """Creates a STAC item for an SRTM/Landsat 7 fused image (COG).
+
+    Args:
+        cog (str): Path to COG asset. COG name must contain YYYYMMDD after second underscore.
+        metadata_url (str): Path to provider metadata.
+
+    Returns:
+        pystac.Item: STAC Item object.
+    """
+
+    id = os.path.splitext(os.path.basename(cog))[0]
+
+    utc = pytz.utc
+    split_cog = os.path.basename(cog).split("_")
+    cog_date = datetime.strptime(split_cog[2], "%Y%m%d")
+    dataset_datetime = utc.localize(cog_date)
+
+    with rasterio.open(cog, 'r') as dataset:
+        mask = dataset.dataset_mask()
+        epsg_code = dataset.crs.to_epsg()
+        for geom, val in rasterio.features.shapes(mask,
+                                                  transform=dataset.transform):
+            geometry = rasterio.warp.transform_geom(dataset.crs,
+                                                    'EPSG:4326',
+                                                    geom,
+                                                    precision=6)
+
+        bbox = Polygon(geometry.get("coordinates")[0]).bounds
+
+    properties = {}
+
+    # Create item
+    item = pystac.Item(
+        id=id,
+        geometry=geometry,
+        bbox=bbox,
+        datetime=dataset_datetime,
+        properties=properties,
+        stac_extensions=[],
+    )
+
+    item_projection = ProjectionExtension.ext(item, add_if_missing=True)
+    item_projection.epsg = epsg_code
+
+    item.add_asset(
+        "cog",
+        pystac.Asset(
+            href=cog,
+            media_type=pystac.MediaType.COG,
+            roles=["data"],
+            title="SRTM/Landsat 7 fused image (COG)",
         ),
     )
 
