@@ -11,11 +11,13 @@ from pyproj import Transformer
 from pystac.extensions.projection import ProjectionExtension
 from pystac.extensions.label import LabelExtension
 from stactools.lila_hkh_glacier.constants import (
-    LABEL_DESCRIPTION, SLICE_LICENSE, SLICE_LICENSE_LINK,
+    FUSED_LICENSE, FUSED_LICENSE_LINK, LABEL_DESCRIPTION, SLICE_LICENSE,
+    SLICE_LICENSE_LINK, LILA_HKH_GLACIER_FUSED_ID,
+    LILA_HKH_GLACIER_FUSED_DESCRIPTION, LILA_HKH_GLACIER_FUSED_TITLE,
     LILA_HKH_GLACIER_SLICE_ID, LILA_HKH_GLACIER_SLICE_DESCRIPTION,
     LILA_HKH_GLACIER_PROVIDER, LILA_HKH_GLACIER_SLICE_TITLE, START_DATETIME,
     END_DATETIME)
-from shapely.geometry import MultiPolygon, Polygon, mapping
+from shapely.geometry import MultiPolygon, Polygon, box, mapping
 from shapely.ops import transform
 
 logger = logging.getLogger(__name__)
@@ -100,8 +102,23 @@ def create_slice_item(feature: dict, destination: str,
     return item
 
 
+def parse_datetime(path: str) -> datetime:
+    """Parses datetime object from path, where filename must contain YYYYMMDD after second underscore.
+
+    Args:
+        path (str): file path. Filename must contain YYYYMMDD after second underscore.
+
+    Returns:
+        datetime: datetime object
+    """
+    utc = pytz.utc
+    split_path = os.path.basename(path).split("_")
+    path_date = datetime.strptime(split_path[2], "%Y%m%d")
+    dataset_datetime = utc.localize(path_date)
+    return dataset_datetime
+
+
 def create_fused_item(cog: str, destination: str) -> pystac.Item:
-    # def create_fused_item(cog: str, destination: str) -> str:
     """Creates a STAC item for an SRTM/Landsat 7 fused image (COG).
 
     Args:
@@ -114,10 +131,7 @@ def create_fused_item(cog: str, destination: str) -> pystac.Item:
 
     id = os.path.splitext(os.path.basename(cog))[0]
 
-    utc = pytz.utc
-    split_cog = os.path.basename(cog).split("_")
-    cog_date = datetime.strptime(split_cog[2], "%Y%m%d")
-    dataset_datetime = utc.localize(cog_date)
+    dataset_datetime = parse_datetime(cog)
 
     with rasterio.open(cog, 'r') as dataset:
         mask = dataset.dataset_mask()
@@ -209,6 +223,58 @@ def create_slice_collection(metadata: dict, destination: str,
 
     stac_collection_url = os.path.join(destination,
                                        f"{LILA_HKH_GLACIER_SLICE_ID}.json")
+
+    collection.set_self_href(stac_collection_url)
+
+    collection.save_object()
+
+    return collection
+
+
+def create_fused_collection(destination: str,
+                            fuseddir: str) -> pystac.Collection:
+    """Create a STAC Collection with extent covering images in fuseddir
+
+    Args:
+        destination (str): Path to output STAC item directory.
+        fuseddir (str): Path to fused images directory.
+
+    Returns:
+        pystac.Collection: pystac collection object
+    """
+    tif_files = [f for f in os.listdir(fuseddir) if f.endswith('.tif')]
+
+    dataset_datetimes = []
+    bboxes = []
+    for f in tif_files:
+        dataset_datetimes.append(parse_datetime(f))
+
+        with rasterio.open(os.path.join(fuseddir, f), 'r') as dataset:
+            bounds = dataset.bounds
+            bboxes.append(box(*bounds))
+
+    bbox = MultiPolygon(bboxes).bounds
+
+    dataset_datetimes.sort()
+    start_datetime = dataset_datetimes[0]
+    end_datetime = dataset_datetimes[-1]
+
+    collection = pystac.Collection(
+        id=LILA_HKH_GLACIER_FUSED_ID,
+        title=LILA_HKH_GLACIER_FUSED_TITLE,
+        description=LILA_HKH_GLACIER_FUSED_DESCRIPTION,
+        providers=[LILA_HKH_GLACIER_PROVIDER],
+        license=FUSED_LICENSE,
+        extent=pystac.Extent(
+            pystac.SpatialExtent([bbox]),
+            pystac.TemporalExtent([start_datetime, end_datetime]),
+        ),
+        catalog_type=pystac.CatalogType.RELATIVE_PUBLISHED,
+    )
+    collection.add_link(FUSED_LICENSE_LINK)
+
+    stac_collection_url = os.path.join(destination,
+                                       f"{LILA_HKH_GLACIER_FUSED_ID}.json")
 
     collection.set_self_href(stac_collection_url)
 

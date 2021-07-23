@@ -84,6 +84,32 @@ def create_lilahkhglacier_command(cli):
             stac.create_slice_item(feature, destination, transformer)
 
     @lilahkhglacier.command(
+        "create-fused-collection",
+        short_help=(
+            "Create a STAC collection for SRTM/Landsat 7 fused images (COGs)"))
+    @click.option(
+        "-d",
+        "--destination",
+        required=True,
+        help="The output directory for the STAC Collection json",
+    )
+    @click.option(
+        "-f",
+        "--fuseddir",
+        help="The fused images directory.",
+    )
+    def create_fused_collection_command(destination: str, fuseddir: str):
+        """Creates a STAC Collection for SRTM/Landsat 7 fused images (COGs)
+
+        Args:
+            destination (str): Directory used to store the collection json
+            fuseddir (str): path to fused images directory
+        Returns:
+            Callable
+        """
+        stac.create_fused_collection(destination, fuseddir)
+
+    @lilahkhglacier.command(
         "create-fused-item",
         short_help="Create a STAC item for an SRTM/Landsat 7 fused image (COG)",
     )

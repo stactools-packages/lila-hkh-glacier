@@ -57,6 +57,26 @@ class CreateCollectionTest(CliTestCase):
 
         item.validate()
 
+    def test_create_fused_collection(self):
+        with TemporaryDirectory() as tmp_dir:
+            test_path = test_data.get_path("data-files")
+            fuseddir = os.path.join(test_path, "raster_data")
+
+            result = self.run_command([
+                "lilahkhglacier", "create-fused-collection", "-d", tmp_dir,
+                "-f", fuseddir
+            ])
+            self.assertEqual(result.exit_code,
+                             0,
+                             msg="\n{}".format(result.output))
+
+            jsons = [p for p in os.listdir(tmp_dir) if p.endswith(".json")]
+            self.assertEqual(len(jsons), 1)
+
+            collection = pystac.read_file(os.path.join(tmp_dir, jsons[0]))
+
+            collection.validate()
+
     def test_create_fused_item(self):
         with TemporaryDirectory() as tmp_dir:
             test_path = test_data.get_path("data-files")

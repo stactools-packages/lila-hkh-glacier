@@ -1,9 +1,13 @@
 import stactools.core
 from stactools.lila_hkh_glacier.stac import (create_slice_collection,
                                              create_slice_item,
+                                             create_fused_collection,
                                              create_fused_item)
 
-__all__ = [create_slice_collection, create_slice_item, create_fused_item]
+__all__ = [
+    create_slice_collection, create_slice_item, create_fused_collection,
+    create_fused_item
+]
 
 stactools.core.use_fsspec()
 
