@@ -1,0 +1,57 @@
+{
+    "type": "Collection",
+    "id": "lila-hkh-glacier-slices",
+    "stac_version": "1.0.0",
+    "description": "This dataset couples annotated glacier locations with multispectral imagery from Landsat 7 and digital elevation and slope data from SRTM. Imagery are provided as numpy patches. Labels are available as multichannel numpy masks. Both the labels and the masks are cropped according to the borders of the HKH region.",
+    "links": [
+      {
+        "rel": "root",
+        "href": "./lila-hkh-glacier-slices.json",
+        "type": "application/json"
+      },
+      {
+        "rel": "license",
+        "href": "https://spdx.org/licenses/CDLA-Permissive-1.0.html",
+        "title": "Community Data License Agreement Permissive 1.0"
+      },
+      {
+        "rel": "self",
+        "href": "./lila-hkh-glacier-slices.json",
+        "type": "application/json"
+      }
+    ],
+    "stac_extensions": [],
+    "title": "Hindu Kush Himalayas Glacier Mapping labelled image slices",
+    "extent": {
+      "spatial": {
+        "bbox": [
+          [
+            75.39538282056621,
+            34.19925660088843,
+            75.63914031141186,
+            34.355865286483294
+          ]
+        ]
+      },
+      "temporal": {
+        "interval": [
+          [
+            "2002-01-01T12:00:00Z",
+            "2008-12-31T12:00:00Z"
+          ]
+        ]
+      }
+    },
+    "license": "CDLA-Permissive-1.0",
+    "providers": [
+      {
+        "name": "Labeled Information Library of Alexandria: Biology and Conservation",
+        "roles": [
+          "producer",
+          "processor",
+          "host"
+        ],
+        "url": "http://lila.science/datasets/hkh-glacier-mapping"
+      }
+    ]
+  }

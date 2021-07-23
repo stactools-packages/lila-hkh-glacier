@@ -1,0 +1,143 @@
+{
+    "type": "Feature",
+    "stac_version": "1.0.0",
+    "id": "6_072",
+    "properties": {
+      "start_datetime": "2002-01-01T12:00:00Z",
+      "end_datetime": "2008-12-31T12:00:00Z",
+      "proj:epsg": 32643,
+      "label:properties": null,
+      "label:description": "The two channels in the pixel-wise masks correspond to clean-iced and debris-covered glaciers.",
+      "label:tasks": [
+        "segmentation"
+      ],
+      "label:type": "raster",
+      "label:methods": [
+        "automated"
+      ],
+      "datetime": null
+    },
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            75.63810530398094,
+            34.19925660088843
+          ],
+          [
+            75.63914031141186,
+            34.3361685220731
+          ],
+          [
+            75.47409491814155,
+            34.33691877098348
+          ],
+          [
+            75.47332715241077,
+            34.200003029161195
+          ],
+          [
+            75.63810530398094,
+            34.19925660088843
+          ]
+        ]
+      ]
+    },
+    "links": [
+      {
+        "rel": "self",
+        "href": "path/to/slice-item.json",
+        "type": "application/json"
+      }
+    ],
+    "assets": {
+      "raster_labels": {
+        "href": "path/to/slice_6_mask_072.npy",
+        "title": "slice_6_mask_072",
+        "roles": [
+          "labels-raster"
+        ]
+      },
+      "raster": {
+        "href": "path/to/slice_6_img_072.npy",
+        "title": "slice_6_img_072",
+        "eo:bands": [
+          {
+            "name": "LE7 B1",
+            "common_name": "blue",
+            "center_wavelength": 0.485
+          },
+          {
+            "name": "LE7 B2",
+            "common_name": "green",
+            "center_wavelength": 0.56
+          },
+          {
+            "name": "LE7 B3",
+            "common_name": "red",
+            "center_wavelength": 0.66
+          },
+          {
+            "name": "LE7 B4",
+            "common_name": "nir",
+            "center_wavelength": 0.835
+          },
+          {
+            "name": "LE7 B5",
+            "common_name": "swir16",
+            "center_wavelength": 1.65
+          },
+          {
+            "name": "LE7 B6_VCID_1",
+            "common_name": "lwir",
+            "center_wavelength": 11.45
+          },
+          {
+            "name": "LE7 B6_VCID_2",
+            "common_name": "lwir",
+            "center_wavelength": 11.45
+          },
+          {
+            "name": "LE7 B7",
+            "common_name": "swir22",
+            "center_wavelength": 2.215
+          },
+          {
+            "name": "LE7 B8",
+            "common_name": "pan",
+            "center_wavelength": 0.71
+          },
+          {
+            "name": "LE7 BQA"
+          },
+          {
+            "name": "NDVI"
+          },
+          {
+            "name": "NDSI"
+          },
+          {
+            "name": "NDWI"
+          },
+          {
+            "name": "SRTM 90 elevation"
+          },
+          {
+            "name": "SRTM 90 slope"
+          }
+        ]
+      }
+    },
+    "bbox": [
+      75.47332715241077,
+      34.19925660088843,
+      75.63914031141186,
+      34.33691877098348
+    ],
+    "stac_extensions": [
+      "https://stac-extensions.github.io/projection/v1.0.0/schema.json",
+      "https://stac-extensions.github.io/label/v1.0.0/schema.json",
+      "https://stac-extensions.github.io/eo/v1.0.0/schema.json"
+    ]
+  }
