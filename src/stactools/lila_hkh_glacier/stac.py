@@ -260,8 +260,10 @@ def create_fused_collection(destination: str,
         dataset_datetimes.append(parse_datetime(f))
 
         with rasterio.open(os.path.join(fuseddir, f), 'r') as dataset:
-            bounds = dataset.bounds
-            bboxes.append(box(*bounds))
+            bounds1 = dataset.bounds
+            bounds2 = rasterio.warp.transform_bounds(dataset.crs, 'EPSG:4326',
+                                                     *bounds1)
+            bboxes.append(box(*bounds2))
 
     bbox = MultiPolygon(bboxes).bounds
 
