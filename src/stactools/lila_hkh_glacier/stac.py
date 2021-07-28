@@ -89,6 +89,7 @@ def create_slice_item(feature: dict, destination: str,
         href=feature["properties"]["img_slice"],
         title=os.path.basename(
             os.path.splitext(feature["properties"]["img_slice"])[0]),
+        roles=["data"],
     )
 
     item.add_asset(
