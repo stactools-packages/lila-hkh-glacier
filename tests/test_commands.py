@@ -19,8 +19,8 @@ class CreateCollectionTest(CliTestCase):
             metadata_path = os.path.join(test_path, "slices.geojson")
 
             result = self.run_command([
-                "lilahkhglacier", "slice", "create-collection", "-d", tmp_dir,
-                "-m", metadata_path
+                "lilahkhglacier", "lilahkhglacier-slice", "create-collection",
+                "-d", tmp_dir, "-m", metadata_path
             ])
             self.assertEqual(result.exit_code,
                              0,
@@ -41,8 +41,8 @@ class CreateCollectionTest(CliTestCase):
             slice_dir = os.path.join(test_path, "slices")
 
             result = self.run_command([
-                "lilahkhglacier", "slice", "create-items", "-d", tmp_dir, "-m",
-                metadata_path, "-s", slice_dir
+                "lilahkhglacier", "lilahkhglacier-slice", "create-items", "-d",
+                tmp_dir, "-m", metadata_path, "-s", slice_dir
             ])
             self.assertEqual(result.exit_code,
                              0,
@@ -63,8 +63,8 @@ class CreateCollectionTest(CliTestCase):
             fuseddir = os.path.join(test_path, "raster_data")
 
             result = self.run_command([
-                "lilahkhglacier", "fused", "create-collection", "-d", tmp_dir,
-                "-f", fuseddir
+                "lilahkhglacier", "lilahkhglacier-fused", "create-collection",
+                "-d", tmp_dir, "-f", fuseddir
             ])
             self.assertEqual(result.exit_code,
                              0,
@@ -84,8 +84,8 @@ class CreateCollectionTest(CliTestCase):
                 test_path, "raster_data/LE07_134040_20070922_clip.tif")
 
             result = self.run_command([
-                "lilahkhglacier", "fused", "create-items", "-d", tmp_dir, "-c",
-                cog_path
+                "lilahkhglacier", "lilahkhglacier-fused", "create-items", "-d",
+                tmp_dir, "-c", cog_path
             ])
             self.assertEqual(result.exit_code,
                              0,
