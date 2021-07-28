@@ -20,7 +20,7 @@ def create_lilahkhglacier_command(cli):
         pass
 
     @lilahkhglacier.group(
-        "slice",
+        "lilahkhglacier-slice",
         short_help=("""Commands for working with labelled image slices"""),
     )
     def slice():
@@ -93,7 +93,7 @@ def create_lilahkhglacier_command(cli):
             stac.create_slice_item(feature, destination, transformer)
 
     @lilahkhglacier.group(
-        "fused",
+        "lilahkhghlacier-fused",
         short_help=(
             """Commands for working with SRTM/Landsat 7 fused images (COGs)"""
         ),
