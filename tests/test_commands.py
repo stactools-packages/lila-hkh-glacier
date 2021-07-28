@@ -19,7 +19,7 @@ class CreateCollectionTest(CliTestCase):
             metadata_path = os.path.join(test_path, "slices.geojson")
 
             result = self.run_command([
-                "lilahkhglacier", "create-slice-collection", "-d", tmp_dir,
+                "lilahkhglacier", "slice", "create-collection", "-d", tmp_dir,
                 "-m", metadata_path
             ])
             self.assertEqual(result.exit_code,
@@ -41,7 +41,7 @@ class CreateCollectionTest(CliTestCase):
             slice_dir = os.path.join(test_path, "slices")
 
             result = self.run_command([
-                "lilahkhglacier", "create-slice-item", "-d", tmp_dir, "-m",
+                "lilahkhglacier", "slice", "create-items", "-d", tmp_dir, "-m",
                 metadata_path, "-s", slice_dir
             ])
             self.assertEqual(result.exit_code,
@@ -63,7 +63,7 @@ class CreateCollectionTest(CliTestCase):
             fuseddir = os.path.join(test_path, "raster_data")
 
             result = self.run_command([
-                "lilahkhglacier", "create-fused-collection", "-d", tmp_dir,
+                "lilahkhglacier", "fused", "create-collection", "-d", tmp_dir,
                 "-f", fuseddir
             ])
             self.assertEqual(result.exit_code,
@@ -84,7 +84,7 @@ class CreateCollectionTest(CliTestCase):
                 test_path, "raster_data/LE07_134040_20070922_clip.tif")
 
             result = self.run_command([
-                "lilahkhglacier", "create-fused-item", "-d", tmp_dir, "-c",
+                "lilahkhglacier", "fused", "create-items", "-d", tmp_dir, "-c",
                 cog_path
             ])
             self.assertEqual(result.exit_code,

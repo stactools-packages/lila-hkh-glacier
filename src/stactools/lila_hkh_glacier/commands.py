@@ -19,8 +19,15 @@ def create_lilahkhglacier_command(cli):
     def lilahkhglacier():
         pass
 
-    @lilahkhglacier.command(
-        "create-slice-collection",
+    @lilahkhglacier.group(
+        "slice",
+        short_help=("""Commands for working with labelled image slices"""),
+    )
+    def slice():
+        pass
+
+    @slice.command(
+        "create-collection",
         short_help=("Create a STAC collection for labelled image slices"))
     @click.option(
         "-d",
@@ -48,8 +55,8 @@ def create_lilahkhglacier_command(cli):
 
         stac.create_slice_collection(metadata, destination, transformer)
 
-    @lilahkhglacier.command(
-        "create-slice-item",
+    @slice.command(
+        "create-items",
         short_help="Create a STAC item for labelled image slices",
     )
     @click.option(
@@ -85,8 +92,17 @@ def create_lilahkhglacier_command(cli):
         for feature in metadata['features']:
             stac.create_slice_item(feature, destination, transformer)
 
-    @lilahkhglacier.command(
-        "create-fused-collection",
+    @lilahkhglacier.group(
+        "fused",
+        short_help=(
+            """Commands for working with SRTM/Landsat 7 fused images (COGs)"""
+        ),
+    )
+    def fused():
+        pass
+
+    @fused.command(
+        "create-collection",
         short_help=(
             "Create a STAC collection for SRTM/Landsat 7 fused images (COGs)"))
     @click.option(
@@ -111,8 +127,8 @@ def create_lilahkhglacier_command(cli):
         """
         stac.create_fused_collection(destination, fuseddir)
 
-    @lilahkhglacier.command(
-        "create-fused-item",
+    @fused.command(
+        "create-items",
         short_help="Create a STAC item for an SRTM/Landsat 7 fused image (COG)",
     )
     @click.option("-c", "--cog", required=True, help="COG href")
