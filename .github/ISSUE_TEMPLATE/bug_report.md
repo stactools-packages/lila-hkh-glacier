@@ -15,7 +15,7 @@ Steps to reproduce the behavior:
 
 > Ex.
 >
-> 1. Install stactools and stactools-lila-hkh-glacier dataset
+> 1. Install stactools-lila-hkh-glacier
 > 2. Run `scripts/test`
 > 3. See error
 
