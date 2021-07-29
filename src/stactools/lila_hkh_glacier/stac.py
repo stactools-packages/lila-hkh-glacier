@@ -197,7 +197,7 @@ def create_fused_item(cog: str, destination: str) -> pystac.Item:
     item_projection = ProjectionExtension.ext(item, add_if_missing=True)
     item_projection.epsg = proj_ext["epsg"]
     item_projection.shape = proj_ext["shape"]
-    item_projection.transform = proj_ext["transform"]
+    item_projection.transform = list(proj_ext["transform"])
     item_projection.bbox = proj_ext["bbox"]
 
     asset = pystac.Asset(
