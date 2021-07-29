@@ -24,6 +24,45 @@ from shapely.ops import transform
 logger = logging.getLogger(__name__)
 
 
+def parse_datetime(path: str) -> datetime:
+    """Parses datetime object from path, where filename must contain YYYYMMDD after second underscore.
+
+    Args:
+        path (str): file path. Filename must contain YYYYMMDD after second underscore.
+
+    Returns:
+        datetime: datetime object
+    """
+    utc = pytz.utc
+    split_path = os.path.basename(path).split("_")
+    path_date = datetime.strptime(split_path[2], "%Y%m%d")
+    dataset_datetime = utc.localize(path_date)
+    return dataset_datetime
+
+
+def get_proj(dataset: rasterio.io.DatasetReader) -> dict:
+    """Extract projection extension parameters from dataset
+
+    Args:
+        dataset (rasterio.io.DatasetReader): dataset object
+
+    Returns:
+        dict: dictionary of projection extension parameters
+    """
+    proj_epsg = dataset.crs.to_epsg()
+    proj_shape = (dataset.profile["height"], dataset.profile["width"])
+    proj_transform = dataset.profile["transform"]
+    bounds = dataset.bounds
+    proj_bbox = [*bounds]
+
+    return {
+        "epsg": proj_epsg,
+        "shape": proj_shape,
+        "transform": proj_transform,
+        "bbox": proj_bbox
+    }
+
+
 def create_slice_item(feature: dict, destination: str,
                       transformer: Transformer) -> pystac.Item:
     """Creates a STAC item for a LILA HKH Glacier Mapping labelled slice image feature.
@@ -42,7 +81,6 @@ def create_slice_item(feature: dict, destination: str,
     id = "_".join([split_img_slice[1], split_img_slice[3]])
 
     geometry1 = Polygon(feature["geometry"].get("coordinates")[0])
-
     geometry2 = transform(transformer.transform, geometry1)
     bbox = geometry2.bounds
 
@@ -63,9 +101,16 @@ def create_slice_item(feature: dict, destination: str,
         stac_extensions=[],
     )
 
+    proj_bbox = list(geometry1.bounds)
+
     item_projection = ProjectionExtension.ext(item, add_if_missing=True)
     item_projection.epsg = int(
         transformer._transformer_maker.crs_from.split(":")[1])
+    item_projection.shape = (512, 512)
+    item_projection.transform = [
+        30.0, 0.0, proj_bbox[0], 0.0, -30.0, proj_bbox[3], 0.0, 0.0, 1.0
+    ]
+    item_projection.bbox = proj_bbox
 
     item_label = LabelExtension.ext(item, add_if_missing=True)
     item_label.label_properties = None
@@ -108,22 +153,6 @@ def create_slice_item(feature: dict, destination: str,
     return item
 
 
-def parse_datetime(path: str) -> datetime:
-    """Parses datetime object from path, where filename must contain YYYYMMDD after second underscore.
-
-    Args:
-        path (str): file path. Filename must contain YYYYMMDD after second underscore.
-
-    Returns:
-        datetime: datetime object
-    """
-    utc = pytz.utc
-    split_path = os.path.basename(path).split("_")
-    path_date = datetime.strptime(split_path[2], "%Y%m%d")
-    dataset_datetime = utc.localize(path_date)
-    return dataset_datetime
-
-
 def create_fused_item(cog: str, destination: str) -> pystac.Item:
     """Creates a STAC item for an SRTM/Landsat 7 fused image (COG).
 
@@ -141,7 +170,9 @@ def create_fused_item(cog: str, destination: str) -> pystac.Item:
 
     with rasterio.open(cog, 'r') as dataset:
         mask = dataset.dataset_mask()
-        epsg_code = dataset.crs.to_epsg()
+
+        proj_ext = get_proj(dataset)
+
         for geom, val in rasterio.features.shapes(mask,
                                                   transform=dataset.transform):
             geometry = rasterio.warp.transform_geom(dataset.crs,
@@ -164,7 +195,10 @@ def create_fused_item(cog: str, destination: str) -> pystac.Item:
     )
 
     item_projection = ProjectionExtension.ext(item, add_if_missing=True)
-    item_projection.epsg = epsg_code
+    item_projection.epsg = proj_ext["epsg"]
+    item_projection.shape = proj_ext["shape"]
+    item_projection.transform = proj_ext["transform"]
+    item_projection.bbox = proj_ext["bbox"]
 
     asset = pystac.Asset(
         href=cog,

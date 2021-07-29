@@ -1,128 +1,111 @@
 {
-    "type": "Feature",
-    "stac_version": "1.0.0",
-    "id": "LE07_134040_20070922_cog",
-    "properties": {
-      "proj:epsg": 32647,
-      "datetime": "2007-09-22T00:00:00Z"
-    },
-    "geometry": {
-      "type": "Polygon",
-      "coordinates": [
-        [
-          [
-            95.796633,
-            29.158965
-          ],
-          [
-            95.798051,
-            29.113276
-          ],
-          [
-            95.840845,
-            29.114292
-          ],
-          [
-            95.839446,
-            29.159983
-          ],
-          [
-            95.796633,
-            29.158965
-          ]
-        ]
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "LE07_134040_20070922_cog",
+  "properties": {
+    "proj:epsg": 32647,
+    "proj:shape": [169, 139],
+    "proj:transform": [
+      30.0, 0.0, 188385.0, 0.0, -30.0, 3229845.0, 0.0, 0.0, 1.0
+    ],
+    "proj:bbox": [188385.0, 3224775.0, 192555.0, 3229845.0],
+    "datetime": "2007-09-22T00:00:00Z"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [95.796633, 29.158965],
+        [95.798051, 29.113276],
+        [95.840845, 29.114292],
+        [95.839446, 29.159983],
+        [95.796633, 29.158965]
       ]
-    },
-    "links": [
-      {
-        "rel": "self",
-        "href": "path/to/fused-item.json",
-        "type": "application/json"
-      }
-    ],
-    "assets": {
-      "cog": {
-        "href": "path/to/LE07_134040_20070922_cog.tif",
-        "type": "image/tiff; application=geotiff; profile=cloud-optimized",
-        "title": "SRTM/Landsat 7 fused image (COG)",
-        "eo:bands": [
-          {
-            "name": "LE7 B1",
-            "common_name": "blue",
-            "center_wavelength": 0.485
-          },
-          {
-            "name": "LE7 B2",
-            "common_name": "green",
-            "center_wavelength": 0.56
-          },
-          {
-            "name": "LE7 B3",
-            "common_name": "red",
-            "center_wavelength": 0.66
-          },
-          {
-            "name": "LE7 B4",
-            "common_name": "nir",
-            "center_wavelength": 0.835
-          },
-          {
-            "name": "LE7 B5",
-            "common_name": "swir16",
-            "center_wavelength": 1.65
-          },
-          {
-            "name": "LE7 B6_VCID_1",
-            "common_name": "lwir",
-            "center_wavelength": 11.45
-          },
-          {
-            "name": "LE7 B6_VCID_2",
-            "common_name": "lwir",
-            "center_wavelength": 11.45
-          },
-          {
-            "name": "LE7 B7",
-            "common_name": "swir22",
-            "center_wavelength": 2.215
-          },
-          {
-            "name": "LE7 B8",
-            "common_name": "pan",
-            "center_wavelength": 0.71
-          },
-          {
-            "name": "LE7 BQA"
-          },
-          {
-            "name": "NDVI"
-          },
-          {
-            "name": "NDSI"
-          },
-          {
-            "name": "NDWI"
-          },
-          {
-            "name": "SRTM 90 elevation"
-          },
-          {
-            "name": "SRTM 90 slope"
-          }
-        ],
-        "roles": [
-          "data"
-        ]
-      }
-    },
-    "bbox": [
-      95.796633,
-      29.113276,
-      95.840845,
-      29.159983
-    ],
-    "stac_extensions": [
-      "https://stac-extensions.github.io/projection/v1.0.0/schema.json",
-      "https://stac-extensions.github.io/eo/v1.0.0/schema.json"
     ]
-  }
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "path/to/fused-item.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {
+    "cog": {
+      "href": "path/to/LE07_134040_20070922_cog.tif",
+      "type": "image/tiff; application=geotiff; profile=cloud-optimized",
+      "title": "SRTM/Landsat 7 fused image (COG)",
+      "eo:bands": [
+        {
+          "name": "LE7 B1",
+          "common_name": "blue",
+          "center_wavelength": 0.485
+        },
+        {
+          "name": "LE7 B2",
+          "common_name": "green",
+          "center_wavelength": 0.56
+        },
+        {
+          "name": "LE7 B3",
+          "common_name": "red",
+          "center_wavelength": 0.66
+        },
+        {
+          "name": "LE7 B4",
+          "common_name": "nir",
+          "center_wavelength": 0.835
+        },
+        {
+          "name": "LE7 B5",
+          "common_name": "swir16",
+          "center_wavelength": 1.65
+        },
+        {
+          "name": "LE7 B6_VCID_1",
+          "common_name": "lwir",
+          "center_wavelength": 11.45
+        },
+        {
+          "name": "LE7 B6_VCID_2",
+          "common_name": "lwir",
+          "center_wavelength": 11.45
+        },
+        {
+          "name": "LE7 B7",
+          "common_name": "swir22",
+          "center_wavelength": 2.215
+        },
+        {
+          "name": "LE7 B8",
+          "common_name": "pan",
+          "center_wavelength": 0.71
+        },
+        {
+          "name": "LE7 BQA"
+        },
+        {
+          "name": "NDVI"
+        },
+        {
+          "name": "NDSI"
+        },
+        {
+          "name": "NDWI"
+        },
+        {
+          "name": "SRTM 90 elevation"
+        },
+        {
+          "name": "SRTM 90 slope"
+        }
+      ],
+      "roles": ["data"]
+    }
+  },
+  "bbox": [95.796633, 29.113276, 95.840845, 29.159983],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v1.0.0/schema.json",
+    "https://stac-extensions.github.io/eo/v1.0.0/schema.json"
+  ]
+}
