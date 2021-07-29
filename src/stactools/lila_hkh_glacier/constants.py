@@ -1,7 +1,6 @@
 # flake8: noqa
 
-from pystac import Provider
-from pystac import Link
+from pystac import Link, Provider, ProviderRole
 from pystac.extensions.eo import Band
 
 FUSED_LICENSE = "PDDL-1.0"
@@ -77,7 +76,7 @@ LILA_HKH_GLACIER_SLICE_TITLE = "Hindu Kush Himalayas Glacier Mapping labelled im
 LILA_HKH_GLACIER_SLICE_DESCRIPTION = "This dataset couples annotated glacier locations with multispectral imagery from Landsat 7 and digital elevation and slope data from SRTM. Imagery are provided as numpy patches. Labels are available as multichannel numpy masks. Both the labels and the masks are cropped according to the borders of the HKH region."
 LILA_HKH_GLACIER_PROVIDER = Provider(
     name="Labeled Information Library of Alexandria: Biology and Conservation",
-    roles=["producer", "processor", "host"],
+    roles=[ProviderRole.PRODUCER, ProviderRole.PROCESSOR, ProviderRole.HOST],
     url="http://lila.science/datasets/hkh-glacier-mapping")
 
 SLICE_LICENSE = "CDLA-Permissive-1.0"

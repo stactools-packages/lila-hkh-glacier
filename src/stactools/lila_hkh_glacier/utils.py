@@ -1,5 +1,6 @@
 import json
 import os
+from typing import Any, Dict
 from pyproj import Transformer
 
 
@@ -7,12 +8,12 @@ def create_transformer(crs_from: int, crs_to: int = 4326) -> Transformer:
     return Transformer.from_crs(crs_from, crs_to, always_xy=True)
 
 
-def get_epsg(metadata: dict) -> int:
+def get_epsg(metadata: Dict[str, Any]) -> int:
     crs = metadata["crs"]["properties"]["name"]
     return int(crs.split("EPSG::")[1])
 
 
-def get_metadata(metadata_url: str) -> dict:
+def get_metadata(metadata_url: str) -> Dict[str, Any]:
     """Gets metadata from the LILA HKH Glacier Mapping geojson metadata.
 
     Args:
@@ -23,14 +24,15 @@ def get_metadata(metadata_url: str) -> dict:
     """
     if metadata_url.endswith(".geojson"):
         with open(metadata_url) as f:
-            metadata = json.load(f)
+            metadata: Dict[str, Any] = json.load(f)
         return metadata
     else:
         # only geojson support.
         raise NotImplementedError()
 
 
-def update_metadata_paths(raw_metadata: dict, slicedir: str) -> dict:
+def update_metadata_paths(raw_metadata: Dict[str, Any],
+                          slicedir: str) -> Dict[str, Any]:
     """Updates image slice and mask slice urls in metadata.
 
     Args:

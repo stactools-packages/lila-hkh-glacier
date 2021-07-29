@@ -6,11 +6,12 @@ import rasterio
 import rasterio.features
 import rasterio.warp
 
+from typing import Any, Dict
 from datetime import datetime
 from pyproj import Transformer
 from pystac.extensions.eo import EOExtension
 from pystac.extensions.projection import ProjectionExtension
-from pystac.extensions.label import LabelExtension
+from pystac.extensions.label import LabelExtension, LabelType
 from stactools.lila_hkh_glacier.constants import (
     FUSED_LICENSE, FUSED_LICENSE_LINK, LABEL_DESCRIPTION, SLICE_LICENSE,
     SLICE_LICENSE_LINK, LILA_HKH_GLACIER_FUSED_BANDS,
@@ -40,7 +41,7 @@ def parse_datetime(path: str) -> datetime:
     return dataset_datetime
 
 
-def get_proj(dataset: rasterio.io.DatasetReader) -> dict:
+def get_proj(dataset: rasterio.io.DatasetReader) -> Dict[str, Any]:
     """Extract projection extension parameters from dataset
 
     Args:
@@ -63,7 +64,7 @@ def get_proj(dataset: rasterio.io.DatasetReader) -> dict:
     }
 
 
-def create_slice_item(feature: dict, destination: str,
+def create_slice_item(feature: Dict[str, Any], destination: str,
                       transformer: Transformer) -> pystac.Item:
     """Creates a STAC item for a LILA HKH Glacier Mapping labelled slice image feature.
 
@@ -106,7 +107,7 @@ def create_slice_item(feature: dict, destination: str,
     item_projection = ProjectionExtension.ext(item, add_if_missing=True)
     item_projection.epsg = int(
         transformer._transformer_maker.crs_from.split(":")[1])
-    item_projection.shape = (512, 512)
+    item_projection.shape = [512, 512]
     item_projection.transform = [
         30.0, 0.0, proj_bbox[0], 0.0, -30.0, proj_bbox[3], 0.0, 0.0, 1.0
     ]
@@ -116,7 +117,7 @@ def create_slice_item(feature: dict, destination: str,
     item_label.label_properties = None
     item_label.label_description = LABEL_DESCRIPTION
     item_label.label_tasks = ["segmentation"]
-    item_label.label_type = "raster"
+    item_label.label_type = LabelType.RASTER
     item_label.label_methods = ["automated"]
 
     # Create label asset
@@ -182,7 +183,7 @@ def create_fused_item(cog: str, destination: str) -> pystac.Item:
 
         bbox = Polygon(geometry.get("coordinates")[0]).bounds
 
-    properties = {}
+    properties: Dict[str, Any] = {}
 
     # Create item
     item = pystac.Item(
@@ -223,7 +224,7 @@ def create_fused_item(cog: str, destination: str) -> pystac.Item:
     return item
 
 
-def create_slice_collection(metadata: dict, destination: str,
+def create_slice_collection(metadata: Dict[str, Any], destination: str,
                             transformer: Transformer) -> pystac.Collection:
     """Create a STAC Collection using a geojson file provided by LILA
     and save it to a destination.
@@ -260,7 +261,8 @@ def create_slice_collection(metadata: dict, destination: str,
         license=SLICE_LICENSE,
         extent=pystac.Extent(
             pystac.SpatialExtent([bbox]),
-            pystac.TemporalExtent([start_datetime, end_datetime]),
+            pystac.TemporalExtent(
+                [[start_datetime or None, end_datetime or None]]),
         ),
         catalog_type=pystac.CatalogType.RELATIVE_PUBLISHED,
     )
@@ -314,7 +316,8 @@ def create_fused_collection(destination: str,
         license=FUSED_LICENSE,
         extent=pystac.Extent(
             pystac.SpatialExtent([bbox]),
-            pystac.TemporalExtent([start_datetime, end_datetime]),
+            pystac.TemporalExtent(
+                [[start_datetime or None, end_datetime or None]]),
         ),
         catalog_type=pystac.CatalogType.RELATIVE_PUBLISHED,
     )

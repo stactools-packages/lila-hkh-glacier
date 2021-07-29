@@ -9,21 +9,21 @@ from stactools.lila_hkh_glacier import utils
 logger = logging.getLogger(__name__)
 
 
-def create_lilahkhglacier_command(cli):
+def create_lilahkhglacier_command(cli: click.Group) -> click.Command:
     """Creates the lilahkhglacier command line utility."""
     @cli.group(
         "lilahkhglacier",
         short_help=(
             """Commands for working with LILA HKH Glacier Mapping data"""),
     )
-    def lilahkhglacier():
+    def lilahkhglacier() -> None:
         pass
 
     @lilahkhglacier.group(
         "lilahkhglacier-slice",
         short_help=("""Commands for working with labelled image slices"""),
     )
-    def slice():
+    def slice() -> None:
         pass
 
     @slice.command(
@@ -40,7 +40,8 @@ def create_lilahkhglacier_command(cli):
         "--metadata",
         help="The url to the metadata geojson",
     )
-    def create_slice_collection_command(destination: str, metadata: str):
+    def create_slice_collection_command(destination: str,
+                                        metadata: str) -> None:
         """Creates a STAC Collection for labelled image slices from LILA HKH Glacier Mapping metadata
 
         Args:
@@ -49,11 +50,11 @@ def create_lilahkhglacier_command(cli):
         Returns:
             Callable
         """
-        metadata = utils.get_metadata(metadata)
-        epsg_code = utils.get_epsg(metadata)
+        metadata_dict = utils.get_metadata(metadata)
+        epsg_code = utils.get_epsg(metadata_dict)
         transformer = utils.create_transformer(epsg_code)
 
-        stac.create_slice_collection(metadata, destination, transformer)
+        stac.create_slice_collection(metadata_dict, destination, transformer)
 
     @slice.command(
         "create-items",
@@ -76,7 +77,7 @@ def create_lilahkhglacier_command(cli):
         help="The slices directory.",
     )
     def create_slice_item_command(destination: str, metadata: str,
-                                  slicedir: str):
+                                  slicedir: str) -> None:
         """Generate STAC items using the metadata.
 
         Args:
@@ -85,11 +86,11 @@ def create_lilahkhglacier_command(cli):
             slicedir (str): url of the LILA HKH Glacier Mapping slices directory
         """
         raw_metadata = utils.get_metadata(metadata)
-        metadata = utils.update_metadata_paths(raw_metadata, slicedir)
-        epsg_code = utils.get_epsg(metadata)
+        metadata_dict = utils.update_metadata_paths(raw_metadata, slicedir)
+        epsg_code = utils.get_epsg(metadata_dict)
         transformer = utils.create_transformer(epsg_code)
 
-        for feature in metadata['features']:
+        for feature in metadata_dict['features']:
             stac.create_slice_item(feature, destination, transformer)
 
     @lilahkhglacier.group(
@@ -98,7 +99,7 @@ def create_lilahkhglacier_command(cli):
             """Commands for working with SRTM/Landsat 7 fused images (COGs)"""
         ),
     )
-    def fused():
+    def fused() -> None:
         pass
 
     @fused.command(
@@ -116,7 +117,8 @@ def create_lilahkhglacier_command(cli):
         "--fuseddir",
         help="The fused images directory.",
     )
-    def create_fused_collection_command(destination: str, fuseddir: str):
+    def create_fused_collection_command(destination: str,
+                                        fuseddir: str) -> None:
         """Creates a STAC Collection for SRTM/Landsat 7 fused images (COGs)
 
         Args:
@@ -141,7 +143,7 @@ def create_lilahkhglacier_command(cli):
     def create_fused_item_command(
         cog: str,
         destination: str,
-    ):
+    ) -> None:
         """Generate a STAC item for an SRTM/Landsat 7 fused image.
 
         Args:
@@ -162,7 +164,7 @@ def create_lilahkhglacier_command(cli):
                   "--source",
                   required=True,
                   help="Path to an input GeoTiff")
-    def create_cog_command(destination: str, source: str):
+    def create_cog_command(destination: str, source: str) -> None:
         """Generate a COG from a GeoTiff. The COG will be saved in the destination
         with `_cog.tif` appended to the name.
 
