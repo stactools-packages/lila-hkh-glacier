@@ -91,7 +91,8 @@ def create_lilahkhglacier_command(cli: click.Group) -> click.Command:
         transformer = utils.create_transformer(epsg_code)
 
         for feature in metadata_dict['features']:
-            stac.create_slice_item(feature, destination, transformer)
+            stac.create_slice_item(feature, destination, transformer,
+                                   epsg_code)
 
     @lilahkhglacier.group(
         "lilahkhglacier-fused",

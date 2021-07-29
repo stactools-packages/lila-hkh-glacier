@@ -65,13 +65,14 @@ def get_proj(dataset: rasterio.io.DatasetReader) -> Dict[str, Any]:
 
 
 def create_slice_item(feature: Dict[str, Any], destination: str,
-                      transformer: Transformer) -> pystac.Item:
+                      transformer: Transformer, epsg_code: int) -> pystac.Item:
     """Creates a STAC item for a LILA HKH Glacier Mapping labelled slice image feature.
 
     Args:
         feature (dict): Path to provider metadata.
         destination (str): Path to output STAC item directory.
         transformer (Transformer): pyproj Transformer for converting from data projection to 4326.
+        epsg_code (int): EPSG code for feature's coordinate reference system
 
     Returns:
         pystac.Item: STAC Item object.
@@ -105,8 +106,7 @@ def create_slice_item(feature: Dict[str, Any], destination: str,
     proj_bbox = list(geometry1.bounds)
 
     item_projection = ProjectionExtension.ext(item, add_if_missing=True)
-    item_projection.epsg = int(
-        transformer._transformer_maker.crs_from.split(":")[1])
+    item_projection.epsg = epsg_code
     item_projection.shape = [512, 512]
     item_projection.transform = [
         30.0, 0.0, proj_bbox[0], 0.0, -30.0, proj_bbox[3], 0.0, 0.0, 1.0
