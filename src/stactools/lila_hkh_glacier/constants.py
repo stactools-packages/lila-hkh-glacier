@@ -3,13 +3,6 @@
 from pystac import Link, Provider, ProviderRole
 from pystac.extensions.eo import Band
 
-FUSED_LICENSE = "PDDL-1.0"
-FUSED_LICENSE_LINK = Link(
-    rel="license",
-    target="https://spdx.org/licenses/PDDL-1.0.html",
-    title="Open Data Commons Public Domain Dedication & License 1.0",
-)
-
 LILA_HKH_GLACIER_FUSED_BANDS = [
     Band({
         "name": "LE7 B1",
@@ -72,12 +65,20 @@ LILA_HKH_GLACIER_FUSED_DESCRIPTION = "Each fused image is a spatial area measuri
 LILA_HKH_GLACIER_FUSED_TITLE = "Hindu Kush Himalayas Glacier Mapping fused SRTM/Landsat 7 images"
 
 LILA_HKH_GLACIER_SLICE_ID = "lila-hkh-glacier-slices"
-LILA_HKH_GLACIER_SLICE_TITLE = "Hindu Kush Himalayas Glacier Mapping labelled image slices"
 LILA_HKH_GLACIER_SLICE_DESCRIPTION = "This dataset couples annotated glacier locations with multispectral imagery from Landsat 7 and digital elevation and slope data from SRTM. Imagery are provided as numpy patches. Labels are available as multichannel numpy masks. Both the labels and the masks are cropped according to the borders of the HKH region."
+LILA_HKH_GLACIER_SLICE_TITLE = "Hindu Kush Himalayas Glacier Mapping labelled image slices"
+
 LILA_HKH_GLACIER_PROVIDER = Provider(
     name="Labeled Information Library of Alexandria: Biology and Conservation",
     roles=[ProviderRole.PRODUCER, ProviderRole.PROCESSOR, ProviderRole.HOST],
     url="http://lila.science/datasets/hkh-glacier-mapping")
+
+FUSED_LICENSE = "PDDL-1.0"
+FUSED_LICENSE_LINK = Link(
+    rel="license",
+    target="https://spdx.org/licenses/PDDL-1.0.html",
+    title="Open Data Commons Public Domain Dedication & License 1.0",
+)
 
 SLICE_LICENSE = "CDLA-Permissive-1.0"
 SLICE_LICENSE_LINK = Link(
