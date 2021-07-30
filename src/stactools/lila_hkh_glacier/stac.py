@@ -8,7 +8,6 @@ import rasterio.warp
 
 from typing import Any, Dict
 from datetime import datetime
-from pyproj import Transformer
 from pystac.extensions.eo import EOExtension
 from pystac.extensions.projection import ProjectionExtension
 from pystac.extensions.label import LabelExtension, LabelType
@@ -19,6 +18,7 @@ from stactools.lila_hkh_glacier.constants import (
     LILA_HKH_GLACIER_FUSED_TITLE, LILA_HKH_GLACIER_SLICE_ID,
     LILA_HKH_GLACIER_SLICE_DESCRIPTION, LILA_HKH_GLACIER_PROVIDER,
     LILA_HKH_GLACIER_SLICE_TITLE, START_DATETIME, END_DATETIME)
+from stactools.lila_hkh_glacier import utils
 from shapely.geometry import MultiPolygon, Polygon, box, mapping
 from shapely.ops import transform
 
@@ -65,18 +65,19 @@ def get_proj(dataset: rasterio.io.DatasetReader) -> Dict[str, Any]:
 
 
 def create_slice_item(feature: Dict[str, Any], destination: str,
-                      transformer: Transformer, epsg_code: int) -> pystac.Item:
+                      epsg_code: int) -> pystac.Item:
     """Creates a STAC item for a LILA HKH Glacier Mapping labelled slice image feature.
 
     Args:
         feature (dict): Path to provider metadata.
         destination (str): Path to output STAC item directory.
-        transformer (Transformer): pyproj Transformer for converting from data projection to 4326.
         epsg_code (int): EPSG code for feature's coordinate reference system
 
     Returns:
         pystac.Item: STAC Item object.
     """
+
+    transformer = utils.create_transformer(epsg_code)
 
     split_img_slice = os.path.splitext(
         os.path.basename(feature["properties"]["img_slice"]))[0].split("_")
@@ -224,8 +225,8 @@ def create_fused_item(cog: str, destination: str) -> pystac.Item:
     return item
 
 
-def create_slice_collection(metadata: Dict[str, Any], destination: str,
-                            transformer: Transformer) -> pystac.Collection:
+def create_slice_collection(metadata_dict: Dict[str, Any],
+                            destination: str) -> pystac.Collection:
     """Create a STAC Collection using a geojson file provided by LILA
     and save it to a destination.
 
@@ -234,11 +235,13 @@ def create_slice_collection(metadata: Dict[str, Any], destination: str,
     Args:
         metadata (dict): metadata parsed from jsonld
         destination (str): Path to output STAC item directory.
-        transformer (Transformer): pyproj Transformer for converting from data projection to 4326.
-
     Returns:
         pystac.Collection: pystac collection object
     """
+
+    epsg_code = utils.get_epsg(metadata_dict)
+    transformer = utils.create_transformer(epsg_code)
+
     utc = pytz.utc
     start_datetime = utc.localize(
         datetime.strptime(START_DATETIME, "%Y-%m-%dT%H:%M:%SZ"))
@@ -246,7 +249,7 @@ def create_slice_collection(metadata: Dict[str, Any], destination: str,
         datetime.strptime(END_DATETIME, "%Y-%m-%dT%H:%M:%SZ"))
 
     polygons = []
-    for feature in metadata["features"]:
+    for feature in metadata_dict["features"]:
         geometry1 = Polygon(feature["geometry"].get("coordinates")[0])
         geometry2 = transform(transformer.transform, geometry1)
         polygons.append(geometry2)

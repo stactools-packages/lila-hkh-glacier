@@ -51,11 +51,9 @@ def create_lilahkhglacier_command(cli: click.Group) -> click.Command:
         Returns:
             Callable
         """
-        metadata_dict = utils.get_metadata(metadata)
-        epsg_code = utils.get_epsg(metadata_dict)
-        transformer = utils.create_transformer(epsg_code)
 
-        stac.create_slice_collection(metadata_dict, destination, transformer)
+        metadata_dict = utils.get_metadata(metadata)
+        stac.create_slice_collection(metadata_dict, destination)
 
     @slice.command(
         "create-items",
@@ -88,14 +86,13 @@ def create_lilahkhglacier_command(cli: click.Group) -> click.Command:
             metadata (str): url containing the LILA HKH Glacier Mapping metadata
             slicedir (str): url of the LILA HKH Glacier Mapping slices directory
         """
+
         raw_metadata = utils.get_metadata(metadata)
         metadata_dict = utils.update_metadata_paths(raw_metadata, slicedir)
         epsg_code = utils.get_epsg(metadata_dict)
-        transformer = utils.create_transformer(epsg_code)
 
         for feature in metadata_dict['features']:
-            stac.create_slice_item(feature, destination, transformer,
-                                   epsg_code)
+            stac.create_slice_item(feature, destination, epsg_code)
 
     @lilahkhglacier.group(
         "lilahkhglacier-fused",
