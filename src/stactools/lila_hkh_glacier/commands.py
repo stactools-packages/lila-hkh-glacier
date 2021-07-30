@@ -38,6 +38,7 @@ def create_lilahkhglacier_command(cli: click.Group) -> click.Command:
     @click.option(
         "-m",
         "--metadata",
+        required=True,
         help="The url to the metadata geojson",
     )
     def create_slice_collection_command(destination: str,
@@ -69,11 +70,13 @@ def create_lilahkhglacier_command(cli: click.Group) -> click.Command:
     @click.option(
         "-m",
         "--metadata",
+        required=True,
         help="The url to the metadata geojson.",
     )
     @click.option(
         "-s",
         "--slicedir",
+        required=True,
         help="The slices directory.",
     )
     def create_slice_item_command(destination: str, metadata: str,
@@ -116,6 +119,7 @@ def create_lilahkhglacier_command(cli: click.Group) -> click.Command:
     @click.option(
         "-f",
         "--fuseddir",
+        required=True,
         help="The fused images directory.",
     )
     def create_fused_collection_command(destination: str,
