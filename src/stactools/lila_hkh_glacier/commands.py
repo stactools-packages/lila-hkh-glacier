@@ -53,7 +53,8 @@ def create_lilahkhglacier_command(cli: click.Group) -> click.Command:
         """
 
         metadata_dict = utils.get_metadata(metadata)
-        stac.create_slice_collection(metadata_dict, destination)
+        collection = stac.create_slice_collection(metadata_dict, destination)
+        collection.save_object()
 
     @slice.command(
         "create-items",
@@ -92,7 +93,8 @@ def create_lilahkhglacier_command(cli: click.Group) -> click.Command:
         epsg_code = utils.get_epsg(metadata_dict)
 
         for feature in metadata_dict['features']:
-            stac.create_slice_item(feature, destination, epsg_code)
+            item = stac.create_slice_item(feature, destination, epsg_code)
+            item.save_object()
 
     @lilahkhglacier.group(
         "lilahkhglacier-fused",
@@ -129,7 +131,8 @@ def create_lilahkhglacier_command(cli: click.Group) -> click.Command:
         Returns:
             Callable
         """
-        stac.create_fused_collection(destination, fuseddir)
+        collection = stac.create_fused_collection(destination, fuseddir)
+        collection.save_object()
 
     @fused.command(
         "create-items",
@@ -152,7 +155,8 @@ def create_lilahkhglacier_command(cli: click.Group) -> click.Command:
             cog (str): location of a COG asset for the item
             destination (str): Local directory to save the STAC Item json
         """
-        stac.create_fused_item(cog, destination)
+        item = stac.create_fused_item(cog, destination)
+        item.save_object()
 
     @lilahkhglacier.command(
         "create-cog",

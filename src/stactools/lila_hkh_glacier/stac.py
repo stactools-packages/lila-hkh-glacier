@@ -150,8 +150,6 @@ def create_slice_item(feature: Dict[str, Any], destination: str,
     stac_item_url = os.path.join(destination, f"{id}.json")
     item.set_self_href(stac_item_url)
 
-    item.save_object()
-
     return item
 
 
@@ -220,8 +218,6 @@ def create_fused_item(cog: str, destination: str) -> pystac.Item:
     stac_item_url = os.path.join(destination, f"{id}.json")
     item.set_self_href(stac_item_url)
 
-    item.save_object()
-
     return item
 
 
@@ -276,8 +272,6 @@ def create_slice_collection(metadata_dict: Dict[str, Any],
 
     collection.set_self_href(stac_collection_url)
 
-    collection.save_object()
-
     return collection
 
 
@@ -330,7 +324,5 @@ def create_fused_collection(destination: str,
                                        f"{LILA_HKH_GLACIER_FUSED_ID}.json")
 
     collection.set_self_href(stac_collection_url)
-
-    collection.save_object()
 
     return collection
