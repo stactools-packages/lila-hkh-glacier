@@ -1,0 +1,84 @@
+{
+  "type": "Collection",
+  "id": "lila-hkh-glacier-fused",
+  "stac_version": "1.0.0",
+  "description": "Each fused image is a spatial area measuring roughly 6km x 7.5km (with definitions that roughly match up with USGS quarter quadrangles). Each fused image comes with one corresponding GeoTIFF file. The entire glacier mapping dataset contains 35 tiles from Afghanistan, Bangladesh, Bhutan, China, India, Myanmar, Nepal, and Pakistan. Each GeoTIFF tile consists of 15 channels. All channels are aligned at 30m spatial resolution. Elevation and slope channels were upsampled from 90m to 30m resolution.",
+  "links": [
+    { "rel": "root", "href": "./collection.json", "type": "application/json" },
+    {
+      "rel": "license",
+      "href": "https://spdx.org/licenses/PDDL-1.0.html",
+      "title": "Open Data Commons Public Domain Dedication & License 1.0"
+    },
+    {
+      "rel": "self",
+      "href": "https://absolute/path/to/collection.json",
+      "type": "application/json"
+    }
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/item-assets/v1.0.0/schema.json"
+  ],
+  "item_assets": {
+    "cog": {
+      "media_type": "image/tiff; application=geotiff; profile=cloud-optimized",
+      "roles": ["data"],
+      "title": "SRTM/Landsat 7 fused image (COG)",
+      "eo:bands": [
+        { "name": "LE7 B1", "common_name": "blue", "center_wavelength": 0.485 },
+        { "name": "LE7 B2", "common_name": "green", "center_wavelength": 0.56 },
+        { "name": "LE7 B3", "common_name": "red", "center_wavelength": 0.66 },
+        { "name": "LE7 B4", "common_name": "nir", "center_wavelength": 0.835 },
+        {
+          "name": "LE7 B5",
+          "common_name": "swir16",
+          "center_wavelength": 1.65
+        },
+        {
+          "name": "LE7 B6_VCID_1",
+          "common_name": "lwir",
+          "center_wavelength": 11.45
+        },
+        {
+          "name": "LE7 B6_VCID_2",
+          "common_name": "lwir",
+          "center_wavelength": 11.45
+        },
+        {
+          "name": "LE7 B7",
+          "common_name": "swir22",
+          "center_wavelength": 2.215
+        },
+        { "name": "LE7 B8", "common_name": "pan", "center_wavelength": 0.71 },
+        { "name": "LE7 BQA" },
+        { "name": "NDVI" },
+        { "name": "NDSI" },
+        { "name": "NDWI" },
+        { "name": "SRTM 90 elevation" },
+        { "name": "SRTM 90 slope" }
+      ]
+    }
+  },
+  "title": "Hindu Kush Himalayas Glacier Mapping fused SRTM/Landsat 7 images",
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          95.7966331936158, 29.1132764650064, 95.84084489848819,
+          29.159983373083932
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [["2007-09-22T00:00:00Z", "2007-09-22T00:00:00Z"]]
+    }
+  },
+  "license": "PDDL-1.0",
+  "providers": [
+    {
+      "name": "Labeled Information Library of Alexandria: Biology and Conservation",
+      "roles": ["producer", "processor", "host"],
+      "url": "http://lila.science/datasets/hkh-glacier-mapping"
+    }
+  ]
+}

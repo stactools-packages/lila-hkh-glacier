@@ -26,7 +26,7 @@
   "links": [
     {
       "rel": "self",
-      "href": "path/to/fused-item.json",
+      "href": "path/to/LE07_134040_20070922_cog.json",
       "type": "application/json"
     }
   ],

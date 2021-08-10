@@ -9,6 +9,7 @@ import rasterio.warp
 from typing import Any, Dict
 from datetime import datetime
 from pystac.extensions.eo import EOExtension
+from pystac.extensions.item_assets import AssetDefinition, ItemAssetsExtension
 from pystac.extensions.projection import ProjectionExtension
 from pystac.extensions.label import LabelExtension, LabelType
 from stactools.lila_hkh_glacier.constants import (
@@ -320,9 +321,22 @@ def create_fused_collection(destination: str,
     )
     collection.add_link(FUSED_LICENSE_LINK)
 
-    stac_collection_url = os.path.join(destination,
-                                       f"{LILA_HKH_GLACIER_FUSED_ID}.json")
+    asset = AssetDefinition({
+        "media_type":
+        pystac.MediaType.COG,
+        "roles": ["data"],
+        "title":
+        "SRTM/Landsat 7 fused image (COG)",
+        "eo:bands": [band.to_dict() for band in LILA_HKH_GLACIER_FUSED_BANDS]
+    })
+
+    collection_itemassets = ItemAssetsExtension.ext(collection,
+                                                    add_if_missing=True)
+    collection_itemassets.item_assets = {"cog": asset}
+
+    stac_collection_url = os.path.join(destination, "collection.json")
 
     collection.set_self_href(stac_collection_url)
+    collection.normalize_hrefs(destination)
 
     return collection
