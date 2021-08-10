@@ -1,0 +1,88 @@
+{
+  "type": "Collection",
+  "id": "lila-hkh-glacier-slices",
+  "stac_version": "1.0.0",
+  "description": "This dataset couples annotated glacier locations with multispectral imagery from Landsat 7 and digital elevation and slope data from SRTM. Imagery are provided as numpy patches. Labels are available as multichannel numpy masks. Both the labels and the masks are cropped according to the borders of the HKH region.",
+  "links": [
+    { "rel": "root", "href": "./collection.json", "type": "application/json" },
+    {
+      "rel": "license",
+      "href": "https://spdx.org/licenses/CDLA-Permissive-1.0.html",
+      "title": "Community Data License Agreement Permissive 1.0"
+    },
+    {
+      "rel": "self",
+      "href": "https://absolute/path/to/collection.json",
+      "type": "application/json"
+    }
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/item-assets/v1.0.0/schema.json"
+  ],
+  "item_assets": {
+    "raster_labels": {
+      "roles": ["labels-raster"],
+      "title": "Raster masks",
+      "description": "The two channels in the pixel-wise masks correspond to clean-iced and debris-covered glaciers."
+    },
+    "raster": {
+      "roles": ["data"],
+      "title": "Raster tiles",
+      "eo:bands": [
+        { "name": "LE7 B1", "common_name": "blue", "center_wavelength": 0.485 },
+        { "name": "LE7 B2", "common_name": "green", "center_wavelength": 0.56 },
+        { "name": "LE7 B3", "common_name": "red", "center_wavelength": 0.66 },
+        { "name": "LE7 B4", "common_name": "nir", "center_wavelength": 0.835 },
+        {
+          "name": "LE7 B5",
+          "common_name": "swir16",
+          "center_wavelength": 1.65
+        },
+        {
+          "name": "LE7 B6_VCID_1",
+          "common_name": "lwir",
+          "center_wavelength": 11.45
+        },
+        {
+          "name": "LE7 B6_VCID_2",
+          "common_name": "lwir",
+          "center_wavelength": 11.45
+        },
+        {
+          "name": "LE7 B7",
+          "common_name": "swir22",
+          "center_wavelength": 2.215
+        },
+        { "name": "LE7 B8", "common_name": "pan", "center_wavelength": 0.71 },
+        { "name": "LE7 BQA" },
+        { "name": "NDVI" },
+        { "name": "NDSI" },
+        { "name": "NDWI" },
+        { "name": "SRTM 90 elevation" },
+        { "name": "SRTM 90 slope" }
+      ]
+    }
+  },
+  "title": "Hindu Kush Himalayas Glacier Mapping labelled image slices",
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          75.39538282056621, 34.19925660088843, 75.63914031141186,
+          34.355865286483294
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [["2002-01-01T12:00:00Z", "2008-12-31T12:00:00Z"]]
+    }
+  },
+  "license": "CDLA-Permissive-1.0",
+  "providers": [
+    {
+      "name": "Labeled Information Library of Alexandria: Biology and Conservation",
+      "roles": ["producer", "processor", "host"],
+      "url": "http://lila.science/datasets/hkh-glacier-mapping"
+    }
+  ]
+}

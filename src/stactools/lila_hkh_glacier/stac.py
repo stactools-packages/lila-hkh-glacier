@@ -231,7 +231,7 @@ def create_slice_collection(metadata_dict: Dict[str, Any],
 
     Args:
         metadata (dict): metadata parsed from jsonld
-        destination (str): Path to output STAC item directory.
+        destination (str): Path to output STAC collection directory.
     Returns:
         pystac.Collection: pystac collection object
     """
@@ -268,10 +268,31 @@ def create_slice_collection(metadata_dict: Dict[str, Any],
     )
     collection.add_link(SLICE_LICENSE_LINK)
 
+    labels_asset = AssetDefinition({
+        "roles": ["labels-raster"],
+        "title": "Raster masks",
+        "description": LABEL_DESCRIPTION
+    })
+
+    raster_asset = AssetDefinition({
+        "roles": ["data"],
+        "title":
+        "Raster tiles",
+        "eo:bands": [band.to_dict() for band in LILA_HKH_GLACIER_FUSED_BANDS]
+    })
+
+    collection_itemassets = ItemAssetsExtension.ext(collection,
+                                                    add_if_missing=True)
+    collection_itemassets.item_assets = {
+        "raster_labels": labels_asset,
+        "raster": raster_asset
+    }
+
     stac_collection_url = os.path.join(destination,
                                        f"{LILA_HKH_GLACIER_SLICE_ID}.json")
 
     collection.set_self_href(stac_collection_url)
+    collection.normalize_hrefs(destination)
 
     return collection
 
@@ -281,7 +302,7 @@ def create_fused_collection(destination: str,
     """Create a STAC Collection with extent covering images in fuseddir
 
     Args:
-        destination (str): Path to output STAC item directory.
+        destination (str): Path to output STAC collection directory.
         fuseddir (str): Path to fused images directory.
 
     Returns:
